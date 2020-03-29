@@ -8,8 +8,8 @@ class HostInfo:
     """
 
     def __init__(self, datacenter="", domain=""):
-        self._datacenter = datacenter
-        self._domain = domain
+        self.datacenter = datacenter
+        self.domain = domain
     
     @property
     def datacenter(self):
@@ -17,7 +17,8 @@ class HostInfo:
 
     @datacenter.setter
     def datacenter(self, value):
-        self._datacenter = value
+        self._datacenter = HostInfo.correctDatacenter(value)
+        self._completeDatacenter = value
 
     @property
     def domain(self):
@@ -26,6 +27,10 @@ class HostInfo:
     @domain.setter
     def domain(self, value):
         self._domain = value
+
+    @property
+    def completeDatacenter(self):
+        return self._completeDatacenter
 
     @staticmethod
     def hostingInfo(url):
@@ -76,11 +81,11 @@ class HostInfo:
         For statistic purpose is usless if different company 
         """
         name = name.upper()
-        if name.startwith("AWS"):
+        if name.startswith("AWS") or name.startswith("AMAZON"):
             return "AWS"
-        elif name.startwith("MICROSOFT"):
+        elif name.startswith("MICROSOFT"):
             return "Microsoft Azure Cloud"
-        elif name.startwith("DIGITALOCEAN") or name.startwith("DIGITAL OCEAN"):
+        elif name.startswith("DIGITALOCEAN") or name.startswith("DIGITAL OCEAN"):
             return "Digital Ocean"
         else:
             return name
