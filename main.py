@@ -2,10 +2,10 @@ import datetime
 import chrome_bookmarks
 
 from hostingInfo import HostInfo
-from hostCache import HostCache
+from hostStorage import HostStorage
 
-def retriveInfo(domain, hostCache, useCache):
-    hostInfo = hostCache.getHostInfo(domain)
+def retriveInfo(domain, hostStorage, useCache):
+    hostInfo = hostStorage.getHostInfo(domain)
     
     if hostInfo == None and useCache:
         start = datetime.datetime.now()
@@ -15,7 +15,7 @@ def retriveInfo(domain, hostCache, useCache):
         delta = end - start
         time = str(delta.total_seconds())
 
-        hostCache.cache([hostInfo])
+        hostStorage.cache([hostInfo])
     else:
         time = "Loaded from cache"
 
@@ -25,7 +25,7 @@ def retriveInfo(domain, hostCache, useCache):
 
 if __name__ == "__main__":
     urls = set()
-    hostCache = HostCache("host_info.sqlite3")
+    hostStorage = HostStorage("host_info.sqlite3")
 
     for url in chrome_bookmarks.urls:
         domain = HostInfo.getDomain(url.url)
@@ -34,4 +34,4 @@ if __name__ == "__main__":
     print("Found " + str(len(urls)) + " favorites")
 
     for u in urls:
-        retriveInfo(u, hostCache, True)
+        retriveInfo(u, hostStorage, True)

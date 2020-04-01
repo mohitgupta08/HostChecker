@@ -1,7 +1,7 @@
 from hostingInfo import HostInfo
 import sqlite3
 
-class HostCache:
+class HostStorage:
     def __init__(self, name):
         """
         :param name: Name of the db or path
