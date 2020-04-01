@@ -17,8 +17,7 @@ class HostInfo:
 
     @datacenter.setter
     def datacenter(self, value):
-        self._datacenter = HostInfo.correctDatacenter(value)
-        self._completeDatacenter = value
+        self._datacenter = value
 
     @property
     def domain(self):
@@ -27,10 +26,6 @@ class HostInfo:
     @domain.setter
     def domain(self, value):
         self._domain = value
-
-    @property
-    def completeDatacenter(self):
-        return self._completeDatacenter
 
     @staticmethod
     def hostingInfo(url):
@@ -54,7 +49,7 @@ class HostInfo:
 
         if r.status_code == requests.codes.ok:
             pq = PyQuery(r.text)
-            hostInfo.datacenter = pq("li span").html() # Get the Datacenter info
+            hostInfo.datacenter = pq(".isp span strong").html() # Get the Datacenter info
             hostInfo.domain = domain
 
         return hostInfo
@@ -74,19 +69,4 @@ class HostInfo:
             return urlInfo.netloc
         else:
             return urlInfo.path
-
-    @staticmethod
-    def correctDatacenter(name):
-        """
-        For statistic purpose is usless if different company 
-        """
-        name = name.upper()
-        if name.startswith("AWS") or name.startswith("AMAZON"):
-            return "AWS"
-        elif name.startswith("MICROSOFT"):
-            return "Microsoft Azure Cloud"
-        elif name.startswith("DIGITALOCEAN") or name.startswith("DIGITAL OCEAN"):
-            return "Digital Ocean"
-        else:
-            return name
         
