@@ -1,6 +1,5 @@
 import datetime
 import chrome_bookmarks
-
 from hostingInfo import HostInfo
 from hostStorage import HostStorage
 
@@ -19,7 +18,7 @@ def retriveInfo(domain, hostStorage, useCache):
     else:
         time = "Loaded from cache"
 
-    print("{:20} {:30} {}".format(hostInfo.domain, str(hostInfo.datacenter), time))
+    print(f"{hostInfo.domain:40} {str(hostInfo.datacenter):40} {time}")
 
 
 
@@ -31,7 +30,7 @@ if __name__ == "__main__":
         domain = HostInfo.getDomain(url.url)
         urls.add(domain)
     
-    print("Found " + str(len(urls)) + " favorites")
+    print(f"Found {str(len(urls))} favorites")
 
     for u in urls:
         retriveInfo(u, hostStorage, True)
