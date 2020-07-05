@@ -27,13 +27,13 @@ def printInfoUrl(domain, hostStorage, useCache, storeOnCache):
         end = datetime.datetime.now()
 
         delta = end - start
-        time = str(delta.total_seconds())
+        time = delta.total_seconds()
 
         # Store the result
         if storeOnCache:
             hostStorage.cache([hostInfo])
 
-    print(f"{hostInfo.domain:40} {str(hostInfo.datacenter):40} {time}")
+    print(f"{hostInfo.domain:40} {str(hostInfo.datacenter):40} {time:.02F}s")
 
 
 def urls(args):

@@ -14,20 +14,20 @@ Get who is hosting a website:
 
 ```console
 $ py -m hostchecker www.google.com
-www.google.com                    Google LLC                   1.331213
+www.google.com                    Google LLC                   1.33s
 ```
 
 Get the hosting service of all your bookmarks *(support only for chrome)*:
 
 ```console
 $ py -m hostchecker
-www.pcgamer.com                          Amazon.com, Inc.                         0.680753
-www.hackerrank.com                       Akamai Technologies, Inc.                0.83082
-translate.google.it                      Google LLC                               0.657953
-www.opengl-tutorial.org                  Fastly                                   2.72328
-bitbucket.org                            Amazon.com, Inc.                         0.723422
-mosquitto.org                            Bitfolk Ltd                              1.227719
-www.haskell.org                          PACKET                                   0.862749
+www.pcgamer.com                          Amazon.com, Inc.                         0.68s
+www.hackerrank.com                       Akamai Technologies, Inc.                0.83s
+translate.google.it                      Google LLC                               0.65s
+www.opengl-tutorial.org                  Fastly                                   2.72s
+bitbucket.org                            Amazon.com, Inc.                         0.72s
+mosquitto.org                            Bitfolk Ltd                              1.22s
+www.haskell.org                          PACKET                                   0.86s
 ```
 
 Get useful stats for the most popular hosting service:
