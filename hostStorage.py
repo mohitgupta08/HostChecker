@@ -1,6 +1,15 @@
 from hostingInfo import HostInfo
 import sqlite3
 
+from dataclasses import dataclass
+
+@dataclass
+class HostStat:
+    percentage: float
+    count: int
+    datacenter: str
+
+
 class HostStorage:
     def __init__(self, name):
         """
@@ -37,3 +46,27 @@ class HostStorage:
 
         self._conn.executemany("INSERT OR REPLACE INTO hosts (domain, datacenter) VALUES (?,?)", rows)
         self._conn.commit()
+
+    def stats(self):
+        """
+        Get stats from the cached values
+
+        :return: HostStat
+        """
+
+        rows = self._conn.execute("""
+            SELECT datacenter, count(*) AS NumOcc
+            FROM hosts
+            GROUP BY datacenter
+            ORDER BY Numocc asc
+            """)
+
+        numTot = self._conn.execute("SELECT COUNT(*) FROM hosts").fetchone()[0]
+
+        result = []
+        for (datacenter, numOcc) in rows.fetchall():
+            result.append(HostStat(numOcc / numTot, numOcc, datacenter))
+
+
+        return result
+

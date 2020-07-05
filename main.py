@@ -54,7 +54,9 @@ if __name__ == "__main__":
     parser.add_argument('url', type=str, nargs='?',
         help="The URL to check (esample: 'www.google.com')")
     parser.add_argument('--bookmarks', action='store_true', default=True,
-        help='Check the host of all bookmarks (default true)')
+        help='Check the host of all bookmarks [default true]')
+    parser.add_argument('--stats', action='store_true', default=False,
+        help='Print the stats of the used website [default false]')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--no-cache', action='store_true', default=False,
@@ -64,10 +66,17 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    useCache = not (args.force_cache or args.no_cache)
-    storeOnCache = not args.no_cache
-
     hostStorage = HostStorage("host_info.sqlite3")
-    domains = urls(args)
-    for d in domains:
-        printInfoUrl(d, hostStorage, useCache, storeOnCache)
+
+    if args.stats:
+        stats = hostStorage.stats()
+        for s in stats:
+            datacenter = "<Unknown>" if s.datacenter is None else s.datacenter
+            print(f"{datacenter:40} {s.count:02} {s.percentage:05.1%}")
+    else:
+        useCache = not (args.force_cache or args.no_cache)
+        storeOnCache = not args.no_cache
+
+        domains = urls(args)
+        for d in domains:
+            printInfoUrl(d, hostStorage, useCache, storeOnCache)
