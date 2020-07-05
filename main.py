@@ -1,12 +1,27 @@
 import datetime
 import chrome_bookmarks
+import argparse
 from hostingInfo import HostInfo
 from hostStorage import HostStorage
 
-def retriveInfo(domain, hostStorage, useCache):
-    hostInfo = hostStorage.getHostInfo(domain)
+def printInfoUrl(domain, hostStorage, useCache, storeOnCache):
+    """
+    Print the info for the given url
+
+    :param domain: String of the damain to get the hosting info from
+    :param hostStorage: HostStorage where to store the info
+    :param useCache: True enable the loading of cached results
+    :param storeOnCache: True enable the caching of the result
+    """
+
+    # Load info from cache
+    hostInfo = None
+    if useCache:
+        hostInfo = hostStorage.getHostInfo(domain)
+        time = "Loaded from cache"
     
-    if hostInfo == None and useCache:
+    # Get info from the web
+    if hostInfo is None:
         start = datetime.datetime.now()
         hostInfo = HostInfo.hostingInfo(domain)
         end = datetime.datetime.now()
@@ -14,23 +29,45 @@ def retriveInfo(domain, hostStorage, useCache):
         delta = end - start
         time = str(delta.total_seconds())
 
-        hostStorage.cache([hostInfo])
-    else:
-        time = "Loaded from cache"
+        # Store the result
+        if storeOnCache:
+            hostStorage.cache([hostInfo])
 
     print(f"{hostInfo.domain:40} {str(hostInfo.datacenter):40} {time}")
 
 
+def urls(args):
+    if args.url is None:
+        urls = set()
+        for url in chrome_bookmarks.urls:
+            domain = HostInfo.getDomain(url.url)
+            urls.add(domain)
+        return list(urls)
+    else:
+        return [args.url]
+
+
+
 
 if __name__ == "__main__":
-    urls = set()
-    hostStorage = HostStorage("host_info.sqlite3")
+    parser = argparse.ArgumentParser(description="Check who is hosting websites")
+    parser.add_argument('url', type=str, nargs='?',
+        help="The URL to check (esample: 'www.google.com')")
+    parser.add_argument('--bookmarks', action='store_true', default=True,
+        help='Check the host of all bookmarks (default true)')
 
-    for url in chrome_bookmarks.urls:
-        domain = HostInfo.getDomain(url.url)
-        urls.add(domain)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--no-cache', action='store_true', default=False,
+        help='The cache will not be used to get and store the results [default false]')
+    group.add_argument('--force-cache', action='store_true', default=False,
+        help='The cached result will not be used [default false]')
     
-    print(f"Found {str(len(urls))} favorites")
+    args = parser.parse_args()
+    
+    useCache = not (args.force_cache or args.no_cache)
+    storeOnCache = not args.no_cache
 
-    for u in urls:
-        retriveInfo(u, hostStorage, True)
+    hostStorage = HostStorage("host_info.sqlite3")
+    domains = urls(args)
+    for d in domains:
+        printInfoUrl(d, hostStorage, useCache, storeOnCache)
