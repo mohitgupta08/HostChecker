@@ -35,5 +35,5 @@ class HostStorage:
         for h in hostsInfo:
             rows.append((h.domain, h.datacenter))
 
-        self._conn.executemany("INSERT INTO hosts (domain, datacenter) VALUES (?,?)", rows)
+        self._conn.executemany("INSERT OR REPLACE INTO hosts (domain, datacenter) VALUES (?,?)", rows)
         self._conn.commit()
