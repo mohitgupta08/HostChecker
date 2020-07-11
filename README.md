@@ -14,7 +14,7 @@ Get who is hosting a website:
 
 ```console
 $ py -m hostchecker www.google.com
-www.google.com                    Google LLC                   1.33s
+www.google.com                           Google LLC                               1.33s
 ```
 
 Get the hosting service of all your bookmarks *(support only for chrome)*:
@@ -41,3 +41,7 @@ Amazon.com, Inc.                         24 10.9%
 Cloudflare, Inc.                         24 10.9%
 Fastly                                   28 12.7%
 ```
+
+## License
+
+You can reed it [here](./LICENSE)
