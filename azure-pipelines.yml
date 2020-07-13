@@ -37,5 +37,5 @@ stages:
           displayName: 'Install setuptools, wheel and twine'
         - script: python setup.py sdist bdist_wheel
           displayName: 'Package'
-        - script: python -m twine upload --username __token__ --password '$PYPI-TOKEN' 
+        - script: python -m twine upload --username __token__ --password '$PYPI-TOKEN' dist/*
           displayName: 'Upload to PyPi'
