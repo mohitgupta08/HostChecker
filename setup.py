@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="host-checker",
-    version="1.0.2",
+    version="1.0.3",
     description="Simple CLI tool to check who is hosting a website",
     long_description=long_description,
     long_description_content_type="text/markdown",
