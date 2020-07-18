@@ -1,5 +1,7 @@
 # HostChecker
 
+[![Build Status](https://dev.azure.com/simonecorazza/Host-Checker/_apis/build/status/SimoneCorazza.HostChecker?branchName=master)](https://dev.azure.com/simonecorazza/Host-Checker/_build/latest?definitionId=3&branchName=master) [![PyPI version](https://badge.fury.io/py/host-checker.svg)](https://badge.fury.io/py/host-checker)
+
 Simple CLI tool to check who is hosting a website
 
 ## Install
