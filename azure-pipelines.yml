@@ -1,5 +1,6 @@
 trigger:
 - master
+- develop
 
 variables:
   python.version: '3.7'
@@ -21,6 +22,22 @@ stages:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         displayName: 'Install dependencies'
+  - stage: DeployCheck
+    dependsOn: Build
+    displayName: Check Deploy Settings
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    jobs:
+      - job: DeployCheck
+        displayName: Check Deploy Settings
+        steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '$(python.version)'
+          displayName: 'Use Python $(python.version)'
+        - script: python -m pip install --user --upgrade setuptools wheel twine
+          displayName: 'Install setuptools, wheel and twine'
+        - script: python setup.py sdist bdist_wheel
+          displayName: 'Package'
   - stage: Deploy
     dependsOn: Build
     displayName: Deploy to PyPi
